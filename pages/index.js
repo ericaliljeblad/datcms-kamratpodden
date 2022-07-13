@@ -7,6 +7,8 @@ import Layout from "@/components/layout";
 import MoreStories from "@/components/more-stories";
 import { request } from "@/lib/datocms";
 import { metaTagsFragment, responsiveImageFragment } from "@/lib/fragments";
+import Logo from "/components/logo";
+import Markdown from "markdown-to-jsx";
 
 export async function getStaticProps({ preview }) {
   const graphqlRequest = {
@@ -21,7 +23,14 @@ export async function getStaticProps({ preview }) {
           seo: _seoMetaTags {
             ...metaTagsFragment
           }
+          contact
+          logo {
+            responsiveImage {
+              ...responsiveImageFragment
+            }
+          }
         }
+
         allPosts(orderBy: date_DESC, first: 20) {
           title
           slug
@@ -68,18 +77,22 @@ export async function getStaticProps({ preview }) {
 
 export default function Index({ subscription }) {
   const {
-    data: { allPosts, site, blog },
+    data: { site, blog },
   } = useQuerySubscription(subscription);
 
-  const heroPost = allPosts[0];
-  const morePosts = allPosts.slice(1);
+  // const heroPost = allPosts[0];
+  // const morePosts = allPosts.slice(1);
   const metaTags = blog.seo.concat(site.favicon);
 
   return (
     <>
       <Layout preview={subscription.preview}>
         <Head>{renderMetaTags(metaTags)}</Head>
-        <Container>
+        <Logo image={blog.logo.responsiveImage} />
+        <Markdown>
+          {blog.contact}
+        </Markdown>
+        {/* <Container>
           <Intro />
           {heroPost && (
             <HeroPost
@@ -92,7 +105,7 @@ export default function Index({ subscription }) {
             />
           )}
           {morePosts.length > 0 && <MoreStories posts={morePosts} />}
-        </Container>
+        </Container> */}
       </Layout>
     </>
   );

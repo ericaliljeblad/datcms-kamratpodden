@@ -1,8 +1,17 @@
-require("dotenv").config();
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  compiler: {
+    styledComponents: true,
+  },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
+    });
 
-module.exports = {
-  env: {
-    NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN:
-      process.env.NEXT_EXAMPLE_CMS_DATOCMS_API_TOKEN,
+    return config;
   },
 };
+
+module.exports = nextConfig;
