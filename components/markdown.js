@@ -4,6 +4,7 @@ import Markdown from 'markdown-to-jsx';
 const StyledMarkdown = styled.div`
   a {
     color: rgb(13, 28, 70);
+    text-decoration: underline;
     transition: color 0.2s ease;
 
     &:hover {
